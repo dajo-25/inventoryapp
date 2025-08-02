@@ -23,8 +23,7 @@ void main() {
         providers: [
           BlocProvider(
             create: (ctx) => ObjectsCubit(
-                ctx.read<ObjectsRepository>(), ctx.read<AuthRepository>())
-              ..loadObjects(),
+                ctx.read<ObjectsRepository>(), ctx.read<AuthRepository>()),
           ),
           BlocProvider(
             create: (ctx) => ObjectDetailCubit(
@@ -32,8 +31,7 @@ void main() {
           ),
           BlocProvider(
             create: (ctx) => ContainersCubit(
-                ctx.read<ContainersRepository>(), ctx.read<AuthRepository>())
-              ..loadContainers(),
+                ctx.read<ContainersRepository>(), ctx.read<AuthRepository>()),
           ),
           BlocProvider(
             create: (ctx) => ContainerDetailCubit(
@@ -54,8 +52,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Inventory App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/objects',
+      initialRoute: '/auth',
       routes: {
+        '/auth': (_) => AuthPage(),
         '/objects': (_) => ObjectsPage(),
         '/objects/detail': (_) => ObjectDetailPage(),
         '/containers': (_) => ContainersPage(),

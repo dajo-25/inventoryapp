@@ -5,6 +5,41 @@ import 'package:inventoryapp/repository.dart';
 import 'models.dart';
 import 'cubits.dart';
 
+class AuthPage extends StatelessWidget {
+  AuthPage({super.key});
+
+  final bearerCtrl = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                  controller: bearerCtrl,
+                  decoration: const InputDecoration(labelText: 'Nombre')),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    final authRepo = context.read<AuthRepository>();
+                    authRepo.setBearer(bearerCtrl.text);
+                    Navigator.pushReplacementNamed(context, "/objects");
+                  },
+                  child: Text("Endavant")),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // -------- ObjectsPage --------
 class ObjectsPage extends StatefulWidget {
   const ObjectsPage({super.key});
@@ -15,6 +50,12 @@ class ObjectsPage extends StatefulWidget {
 
 class _ObjectsPageState extends State<ObjectsPage> {
   final _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ObjectsCubit>().loadObjects();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +71,6 @@ class _ObjectsPageState extends State<ObjectsPage> {
             icon: const Icon(Icons.refresh),
             onPressed: () {
               context.read<ObjectsCubit>().loadObjects();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () async {
-              await _showSettingsForm(context);
             },
           ),
           IconButton(
@@ -110,34 +145,6 @@ class _ObjectsPageState extends State<ObjectsPage> {
       ),
     );
   }
-}
-
-Future<void> _showSettingsForm(BuildContext context) async {
-  final bearerCtrl =
-      TextEditingController(text: context.read<AuthRepository>().getBearer);
-
-  await showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-            title: Text("Settings"),
-            content: TextField(
-                controller: bearerCtrl,
-                decoration: const InputDecoration(labelText: 'Nombre')),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: const Text('Cancelar'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final authRepo = context.read<AuthRepository>();
-                  authRepo.setBearer(bearerCtrl.text);
-                  Navigator.pop(dialogContext);
-                },
-                child: Text('Guardar'),
-              ),
-            ],
-          ));
 }
 
 void _showObjectForm(BuildContext context, {ObjectItem? obj}) {
@@ -268,10 +275,22 @@ class ObjectDetailPage extends StatelessWidget {
 }
 
 // -------- ContainersPage --------
-class ContainersPage extends StatelessWidget {
+
+class ContainersPage extends StatefulWidget {
+  const ContainersPage({super.key});
+
+  @override
+  State<ContainersPage> createState() => _ContainersPageState();
+}
+
+class _ContainersPageState extends State<ContainersPage> {
   final _searchController = TextEditingController();
 
-  ContainersPage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    context.read<ContainersCubit>().loadContainers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -353,54 +372,54 @@ class ContainersPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  void _showContainerForm(BuildContext context, {ContainerItem? ctr}) {
-    final isNew = ctr == null;
-    final nombreCtrl = TextEditingController(text: ctr?.nombre);
-    final descCtrl = TextEditingController(text: ctr?.descripcion);
+void _showContainerForm(BuildContext context, {ContainerItem? ctr}) {
+  final isNew = ctr == null;
+  final nombreCtrl = TextEditingController(text: ctr?.nombre);
+  final descCtrl = TextEditingController(text: ctr?.descripcion);
 
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(isNew ? 'Nuevo Contenedor' : 'Editar Contenedor'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                  controller: nombreCtrl,
-                  decoration: const InputDecoration(labelText: 'Nombre')),
-              TextField(
-                  controller: descCtrl,
-                  decoration: const InputDecoration(labelText: 'Descripción')),
-            ],
-          ),
+  showDialog(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: Text(isNew ? 'Nuevo Contenedor' : 'Editar Contenedor'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+                controller: nombreCtrl,
+                decoration: const InputDecoration(labelText: 'Nombre')),
+            TextField(
+                controller: descCtrl,
+                decoration: const InputDecoration(labelText: 'Descripción')),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newCtr = ContainerItem(
-                id: ctr?.id ?? 0,
-                nombre: nombreCtrl.text,
-                descripcion: descCtrl.text,
-              );
-              final cubit = context.read<ContainersCubit>();
-              if (isNew) {
-                await cubit.createContainer(newCtr);
-              } else {
-                await cubit.updateContainer(newCtr);
-              }
-              Navigator.pop(dialogContext);
-            },
-            child: Text(isNew ? 'Crear' : 'Guardar'),
-          ),
-        ],
       ),
-    );
-  }
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(dialogContext),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final newCtr = ContainerItem(
+              id: ctr?.id ?? 0,
+              nombre: nombreCtrl.text,
+              descripcion: descCtrl.text,
+            );
+            final cubit = context.read<ContainersCubit>();
+            if (isNew) {
+              await cubit.createContainer(newCtr);
+            } else {
+              await cubit.updateContainer(newCtr);
+            }
+            Navigator.pop(dialogContext);
+          },
+          child: Text(isNew ? 'Crear' : 'Guardar'),
+        ),
+      ],
+    ),
+  );
 }
 
 // -------- ContainerDetailPage --------
@@ -419,8 +438,8 @@ class ContainerDetailPage extends StatelessWidget {
               final state = context.read<ContainerDetailCubit>().state;
               if (state is ContainerDetailLoaded) {
                 Navigator.pop(context);
-                ContainersPage()
-                    ._showContainerForm(context, ctr: state.container);
+
+                _showContainerForm(context, ctr: state.container);
               }
             },
           ),
