@@ -12,7 +12,7 @@ RUN flutter pub get
 COPY . .
 
 # Compilamos para web en modo release
-RUN flutter build web --release
+RUN flutter build web --release --pwa-strategy=none
 
 # Etapa 2: Servir con Nginx
 FROM nginx:stable-alpine
