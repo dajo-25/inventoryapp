@@ -10,9 +10,7 @@ class ApiClient {
           connectTimeout: Duration(seconds: 5), // tiempo máximo para conectar
           receiveTimeout:
               Duration(seconds: 5), // tiempo máximo para recibir datos
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: {'Content-Type': 'application/json'},
         )) {
     // Opcional: añadir un interceptor de logging para depurar
     _dio.interceptors.add(LogInterceptor(
@@ -21,9 +19,16 @@ class ApiClient {
     ));
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? params}) async {
+  Future<Response> get(String path,
+      {Map<String, dynamic>? params, required String bearer}) async {
     try {
-      return await _dio.get(path, queryParameters: params);
+      return await _dio.get(
+        path,
+        queryParameters: params,
+        options: Options(
+          headers: {'Authorization': 'Bearer $bearer'},
+        ),
+      );
     } on DioException catch (e) {
       // Manejo de errores más fino
       if (e.type == DioExceptionType.connectionTimeout ||
@@ -38,25 +43,44 @@ class ApiClient {
     }
   }
 
-  Future<Response> post(String path, Map<String, dynamic> body) async {
+  Future<Response> post(String path, Map<String, dynamic> body,
+      {required String bearer}) async {
     try {
-      return await _dio.post(path, data: body);
+      return await _dio.post(
+        path,
+        data: body,
+        options: Options(
+          headers: {'Authorization': 'Bearer $bearer'},
+        ),
+      );
     } on DioException catch (e) {
       throw Exception('POST falló: ${e.message}');
     }
   }
 
-  Future<Response> put(String path, Map<String, dynamic> body) async {
+  Future<Response> put(String path, Map<String, dynamic> body,
+      {required String bearer}) async {
     try {
-      return await _dio.put(path, data: body);
+      return await _dio.put(
+        path,
+        data: body,
+        options: Options(
+          headers: {'Authorization': 'Bearer $bearer'},
+        ),
+      );
     } on DioException catch (e) {
       throw Exception('PUT falló: ${e.message}');
     }
   }
 
-  Future<Response> delete(String path) async {
+  Future<Response> delete(String path, {required String bearer}) async {
     try {
-      return await _dio.delete(path);
+      return await _dio.delete(
+        path,
+        options: Options(
+          headers: {'Authorization': 'Bearer $bearer'},
+        ),
+      );
     } on DioException catch (e) {
       throw Exception('DELETE falló: ${e.message}');
     }
