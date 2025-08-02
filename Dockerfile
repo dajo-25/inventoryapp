@@ -1,5 +1,5 @@
-# Etapa 1: Build de Flutter Web
-FROM cirrusci/flutter:3.6.1-stable AS build
+# Etapa 1: build con Flutter (Dart >=3.6.1 via canal beta)
+FROM ghcr.io/cirruslabs/flutter:beta AS build
 
 # Directorio de trabajo
 WORKDIR /app
