@@ -1,6 +1,10 @@
 # Etapa 1: Build de Flutter Web
 FROM cirrusci/flutter:latest AS build
 
+# Fuerza que estemos en el canal estable y obtenemos la última versión
+RUN flutter channel stable && \
+    flutter upgrade --force
+    
 # Directorio de trabajo
 WORKDIR /app
 
