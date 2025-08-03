@@ -374,7 +374,7 @@ class _ContainersPageState extends State<ContainersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mis Contenedores'),
+        title: const Text('Contenidors'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showContainerForm(context),
@@ -460,16 +460,16 @@ void _showContainerForm(BuildContext context, {ContainerItem? ctr}) {
   showDialog(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      title: Text(isNew ? 'Nuevo Contenedor' : 'Editar Contenedor'),
+      title: Text(isNew ? 'Nou contenidor' : 'Editar contenidor'),
       content: SingleChildScrollView(
         child: Column(
           children: [
             TextField(
                 controller: nombreCtrl,
-                decoration: const InputDecoration(labelText: 'Nombre')),
+                decoration: const InputDecoration(labelText: 'Nom')),
             TextField(
                 controller: descCtrl,
-                decoration: const InputDecoration(labelText: 'Descripción')),
+                decoration: const InputDecoration(labelText: 'Descripció')),
           ],
         ),
       ),
@@ -508,7 +508,7 @@ class ContainerDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalle de Contenedor'),
+        title: const Text('Detall del contenidor'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -534,10 +534,10 @@ class ContainerDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Nombre: ${ctr.nombre}',
+                  Text('Nom: ${ctr.nombre}',
                       style: const TextStyle(fontSize: 20)),
                   const SizedBox(height: 8),
-                  Text('Descripción: ${ctr.descripcion}'),
+                  Text('Descripció: ${ctr.descripcion}'),
                 ],
               ),
             );
