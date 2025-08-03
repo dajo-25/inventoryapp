@@ -2,7 +2,7 @@ class ObjectItem {
   final int id;
   final String nombre;
   final String descripcion;
-  final int cantidad;
+  final String cantidad;
   final String categoria;
   final String subcategoria;
   final String almacenadoEn;
@@ -19,13 +19,13 @@ class ObjectItem {
 
   factory ObjectItem.fromJson(Map<String, dynamic> json) {
     return ObjectItem(
-      id: json['id'],
-      nombre: json['nombre'],
-      descripcion: json['descripcion'],
-      cantidad: json['cantidad'],
-      categoria: json['categoria'],
-      subcategoria: json['subcategoria'],
-      almacenadoEn: json['almacenado_en'],
+      id: int.tryParse(json["id"].toString()) ?? 0,
+      nombre: json['nombre'].toString(),
+      descripcion: json['descripcion'].toString(),
+      cantidad: json['cantidad'].toString(),
+      categoria: json['categoria'].toString(),
+      subcategoria: json['subcategoria'].toString(),
+      almacenadoEn: json['almacenado_en'].toString(),
     );
   }
 
@@ -54,9 +54,9 @@ class ContainerItem {
 
   factory ContainerItem.fromJson(Map<String, dynamic> json) {
     return ContainerItem(
-      id: json['id'],
-      nombre: json['nombre'],
-      descripcion: json['descripcion'],
+      id: int.tryParse(json['id']) ?? 0,
+      nombre: json['nombre'] as String,
+      descripcion: json['descripcion'] as String,
     );
   }
 

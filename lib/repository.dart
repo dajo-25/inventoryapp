@@ -79,5 +79,5 @@ class AuthRepository {
     _bearer = bearer;
   }
 
-  String get getBearer => _bearer ?? "";
+  String get getBearer => _bearer ?? "holii<3";
 }
