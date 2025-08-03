@@ -31,6 +31,26 @@ class ObjectItem extends Equatable {
     );
   }
 
+  ObjectItem copyWith({
+    int? id,
+    String? nombre,
+    String? descripcion,
+    String? cantidad,
+    String? categoria,
+    String? subcategoria,
+    String? almacenadoEn,
+  }) {
+    return ObjectItem(
+      id: id ?? this.id,
+      nombre: nombre ?? this.nombre,
+      descripcion: descripcion ?? this.descripcion,
+      cantidad: cantidad ?? this.cantidad,
+      categoria: categoria ?? this.categoria,
+      subcategoria: subcategoria ?? this.subcategoria,
+      almacenadoEn: almacenadoEn ?? this.almacenadoEn,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'nombre': nombre,
@@ -70,6 +90,14 @@ class ContainerItem extends Equatable {
       id: int.tryParse(json['id']) ?? 0,
       nombre: json['nombre'] as String,
       descripcion: json['descripcion'] as String,
+    );
+  }
+
+  ContainerItem copyWith({int? id, String? nombre, String? descripcion}) {
+    return ContainerItem(
+      id: id ?? this.id,
+      nombre: nombre ?? this.nombre,
+      descripcion: descripcion ?? this.descripcion,
     );
   }
 

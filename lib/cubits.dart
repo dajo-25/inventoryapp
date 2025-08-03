@@ -103,9 +103,11 @@ class ObjectDetailCubit extends Cubit<ObjectDetailState> {
   Future<void> loadDetail(int id) async {
     try {
       emit(ObjectDetailLoading());
-      final obj =
-          await _repo.fetchObjectDetail(id, bearer: _authRepo.getBearer);
-      emit(ObjectDetailLoaded(obj));
+      if (!isClosed) {
+        final obj =
+            await _repo.fetchObjectDetail(id, bearer: _authRepo.getBearer);
+        emit(ObjectDetailLoaded(obj));
+      }
     } catch (e) {
       emit(ObjectDetailError(e.toString()));
     }
