@@ -1,4 +1,6 @@
-class ObjectItem {
+import 'package:equatable/equatable.dart';
+
+class ObjectItem extends Equatable {
   final int id;
   final String nombre;
   final String descripcion;
@@ -7,7 +9,7 @@ class ObjectItem {
   final String subcategoria;
   final String almacenadoEn;
 
-  ObjectItem({
+  const ObjectItem({
     required this.id,
     required this.nombre,
     required this.descripcion,
@@ -39,14 +41,25 @@ class ObjectItem {
       'almacenado_en': almacenadoEn,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        nombre,
+        descripcion,
+        cantidad,
+        categoria,
+        subcategoria,
+        almacenadoEn,
+        id
+      ];
 }
 
-class ContainerItem {
+class ContainerItem extends Equatable {
   final int id;
   final String nombre;
   final String descripcion;
 
-  ContainerItem({
+  const ContainerItem({
     required this.id,
     required this.nombre,
     required this.descripcion,
@@ -66,4 +79,7 @@ class ContainerItem {
       'descripcion': descripcion,
     };
   }
+
+  @override
+  List<Object?> get props => [nombre, descripcion, id];
 }
