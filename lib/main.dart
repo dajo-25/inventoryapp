@@ -6,6 +6,8 @@ import 'api_client.dart';
 import 'repository.dart';
 import 'cubits.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   final apiClient = ApiClient();
   final objectsRepo = ObjectsRepository(apiClient);
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Inventory App',
       theme: ThemeData(primarySwatch: Colors.blue),
