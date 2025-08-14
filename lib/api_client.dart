@@ -1,6 +1,5 @@
 // api_client_dio.dart
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:inventoryapp/main.dart';
 
 class ApiClient {
@@ -15,13 +14,17 @@ class ApiClient {
           headers: {'Content-Type': 'application/json'},
         )) {
     // Opcional: añadir un interceptor de logging para depurar
-    _dio.interceptors.add(InterceptorsWrapper(
-      onResponse: (response, handler) {
-        if (response.statusCode == 401) {
-          navigatorKey.currentState?.pushNamed('/auth');
-        }
-      },
-    ));
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (error, handler) {
+          if (error.response?.statusCode == 401) {
+            navigatorKey.currentState?.pushNamed('/auth');
+          }
+          handler.next(error); // Continua el flux d'error normalment
+        },
+      ),
+    );
+
     _dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
